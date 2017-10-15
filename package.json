@@ -1,11 +1,18 @@
 {
+    "main": "dist/img-blur-in.js",
     "scripts": {
+        "test": "node ./test/server.js",
         "build": "rollup -c ./build/rollup.config.js"
     },
     "devDependencies": {
+        "express": "^4.16.2",
+        "open": "0.0.5",
         "rollup": "^0.50.0",
         "rollup-plugin-typescript": "^0.8.1",
         "rollup-plugin-uglify": "^2.0.1",
         "source-map-support": "^0.5.0"
+    },
+    "dependencies": {
+        "sentinel-js": "0.0.4"
     }
 }

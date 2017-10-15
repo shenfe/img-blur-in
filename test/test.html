@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>img-blur-in testing</title>
+        <style>
+            .clearfix::before, .clearfix::after {
+                content: '';
+                display: table;
+            }
+            .clearfix::after {
+                clear: both;
+                overflow: hidden;
+            }
+            .list {
+                margin-top: 1000px;
+                width: 100%;
+            }
+            .item {
+                float: left;
+                width: 50%;
+            }
+            .item img {
+                width: 100%;
+                height: 100%;
+            }
+            .img-blur-in {
+                -webkit-filter: blur(15px);
+                -moz-filter: blur(15px);
+                -ms-filter: blur(15px);
+                -o-filter: blur(15px);
+                filter: blur(15px);
+                -webkit-transition: all ease .2s;
+                -moz-transition: all ease .2s;
+                -ms-transition: all ease .2s;
+                -o-transition: all ease .2s;
+                transition: all ease .2s;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="list" class="list clearfix">
+            <div class="item"><img class="img-blur-in" src="img/1S.jpg"></div>
+            <div class="item"><img class="img-blur-in" src="img/1L.jpg"></div>
+            <div class="item"><img class="img-blur-in" src="img/2S.jpg" data-src="img/2L.jpg"></div>
+            <div class="item"><img class="img-blur-in" src="img/3S.jpg" data-src="img/3L.jpg"></div>
+            <div class="item"><img class="img-blur-in" src="img/4S.jpg" data-src="img/4L.jpg" data-lazy="true"></div>
+        </div>
+        <script src="img-blur-in.js"></script>
+    </body>
+</html>

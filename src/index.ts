@@ -1,30 +1,98 @@
-import { addCssRule, kvs2str } from './helper'
+import { throttle } from './helper'
+
+import domready from './domready'
+
+import sentinel from './sentinel.js'
 
 declare global {
     interface Window { [key: string]: any; }
+    interface Image extends HTMLImageElement { src: string }
 }
 
 const flag = 'rand_4958672984';
 
-export const init = (): void => {
+const isLoaded = (img: Image): boolean => {
+    if (!img.complete) {
+        return false;
+    }
+
+    if (typeof img.naturalWidth !== 'undefined' && img.naturalWidth === 0) {
+        return false;
+    }
+
+    return true;
+};
+
+interface options {
+    className?: string;
+    replace?: boolean;
+}
+
+const inView = (el: HTMLElement): boolean => {
+    let { top, right, bottom, left } = el.getBoundingClientRect();
+    let w = Math.max(window.document.documentElement.clientWidth, window.innerWidth || 0);
+    let h = Math.max(window.document.documentElement.clientHeight, window.innerHeight || 0);
+    return !(top >= h || bottom <= 0);
+};
+
+const process = (img: Image, className: string): void => {
+    let handle = () => {
+        let ifReplace: boolean = !!img.getAttribute('data-src');
+        let url: string = img.getAttribute(ifReplace ? 'data-src' : 'src');
+        let onLoaded = function () {
+            img.src = url;
+            ifReplace && img.removeAttribute('data-src');
+            img.classList.remove(className);
+        };
+
+        let i = new Image();
+        i.src = url;
+        if (isLoaded(i)) {
+            onLoaded();
+        } else {
+            i.onload = function () {
+                onLoaded();
+            };
+        }
+    };
+
+    let lazyAttr = img.getAttribute('data-lazy');
+    if (lazyAttr === 'true') {
+        if (inView(img)) {
+            handle();
+        } else {
+            window.addEventListener('scroll', throttle(function (e: Event) {
+                if (!inView(img)) return;
+                handle();
+            }, 100), false);
+        }
+    } else {
+        handle();
+    }
+};
+
+export const watch = (className: string): void => {
+    domready(function () {
+        let imgs: Array<Image> = [].slice.call(window.document.querySelectorAll(`img.${className}`), 0);
+        imgs.forEach(img => {
+            process(img, className);
+        });
+    });
+
+    sentinel.on(['.' + className], function (img: Image) {
+        console.log('sentinel');
+        process(img, className);
+    });
+};
+
+const init = (): void => {
     if (window[flag]) return;
     window[flag] = true;
 
     let blurRadius: number = 15;
     let transitionDuration: number = .2;
 
-    addCssRule('.img-blur-in', kvs2str({
-        '-webkit-filter': `blur(${blurRadius}px)`,
-        '-moz-filter': `blur(${blurRadius}px)`,
-        '-ms-filter': `blur(${blurRadius}px)`,
-        '-o-filter': `blur(${blurRadius}px)`,
-        'filter': `blur(${blurRadius}px)`,
-        '-webkit-transition': `all ease ${transitionDuration}s`,
-        '-moz-transition': `all ease ${transitionDuration}s`,
-        '-ms-transition': `all ease ${transitionDuration}s`,
-        '-o-transition': `all ease ${transitionDuration}s`,
-        'transition': `all ease ${transitionDuration}s`
-    }));
-}
+    watch('img-blur-in');
+};
 
 init();
