@@ -2,6 +2,8 @@
 
 Make images loading lazily with a blur effect.
 
+<p align="center"><img src="https://raw.githubusercontent.com/shenfe/img-blur-in/master/readme_assets/demo.png" alt="demo"></p>
+
 ## Usage
 
 ### style
