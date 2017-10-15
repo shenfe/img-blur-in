@@ -37,10 +37,16 @@ Make images loading lazily with a blur effect.
 <img class="img-blur-in" src="small.jpg" data-src="large.jpg" data-lazy="true" alt="blur until the image is into the viewport and the large image is loaded">
 ```
 
-## Advance
+### customization
 
-If you have your own CSS classes for images, use it like this:
+If you have your own CSS class name for images, use it like this:
 
 ```js
 window.ImgBlurIn.watch('.your-class');
 ```
+
+## License
+
+[MIT](http://opensource.org/licenses/MIT)
+
+Copyright (c) 2017-present, [shenfe](https://github.com/shenfe)
