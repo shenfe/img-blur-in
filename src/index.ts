@@ -86,7 +86,6 @@ export const watch = (className: string): void => {
     });
 
     sentinel.on(['.' + className], function (img: Image) {
-        console.log('sentinel');
         process(img, className);
     });
 };
