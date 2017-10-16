@@ -42,7 +42,7 @@ Make images loading lazily with a blur-in effect.
 If you have your own CSS class name for images, use it like this:
 
 ```js
-window.ImgBlurIn.watch('.your-class');
+window.ImgBlurIn.watch('your-class');
 ```
 
 ## License
