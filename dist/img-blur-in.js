@@ -4,6 +4,17 @@
 	(factory((global.ImgBlurIn = {})));
 }(this, (function (exports) { 'use strict';
 
+var addCssRule = function (selector, style) {
+    var styleEl = window.document.head.getElementsByTagName('style')[0];
+    if (!styleEl) {
+        styleEl = window.document.createElement('style');
+        window.document.head.insertBefore(styleEl, window.document.head.firstChild);
+    }
+    var styleSheet = styleEl.sheet;
+    var cssRules = styleSheet.cssRules || styleSheet.rules;
+    styleSheet.insertRule(selector + "{" + style + "}", cssRules.length);
+};
+
 var throttle = function (func, wait, options) {
     if (options === void 0) { options = {}; }
     var context, args, result;
@@ -201,6 +212,8 @@ var process = function (img, className) {
         var onLoaded = function () {
             img.src = url;
             ifReplace && img.removeAttribute('data-src');
+            addCssRule("." + className + "-out", "-webkit-filter: blur(0);-moz-filter: blur(0);-ms-filter: blur(0);-o-filter: blur(0);filter: blur(0);\n                -webkit-transition: all ease .4s;-moz-transition: all ease .4s;-ms-transition: all ease .4s;-o-transition: all ease .4s;transition: all ease .4s;");
+            img.classList.add(className + "-out");
             img.classList.remove(className);
         };
         var i = new Image();

@@ -1,4 +1,4 @@
-import { throttle } from './helper'
+import { addCssRule, throttle } from './helper'
 
 import domready from './domready'
 
@@ -42,6 +42,12 @@ const process = (img: Image, className: string): void => {
         let onLoaded = function () {
             img.src = url;
             ifReplace && img.removeAttribute('data-src');
+            addCssRule(
+                `.${className}-out`, 
+                `-webkit-filter: blur(0);-moz-filter: blur(0);-ms-filter: blur(0);-o-filter: blur(0);filter: blur(0);
+                -webkit-transition: all ease .4s;-moz-transition: all ease .4s;-ms-transition: all ease .4s;-o-transition: all ease .4s;transition: all ease .4s;`
+            );
+            img.classList.add(`${className}-out`);
             img.classList.remove(className);
         };
 
