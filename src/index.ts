@@ -44,8 +44,8 @@ const process = (img: Image, className: string): void => {
             ifReplace && img.removeAttribute('data-src');
             addCssRule(
                 `.${className}-out`, 
-                `-webkit-filter: blur(0);-moz-filter: blur(0);-ms-filter: blur(0);-o-filter: blur(0);filter: blur(0);
-                -webkit-transition: all ease .4s;-moz-transition: all ease .4s;-ms-transition: all ease .4s;-o-transition: all ease .4s;transition: all ease .4s;`
+                `-webkit-filter: none;-moz-filter: none;-ms-filter: none;-o-filter: none;filter: none;
+                -webkit-transition: all ease .2s;-moz-transition: all ease .2s;-ms-transition: all ease .2s;-o-transition: all ease .2s;transition: all ease .2s;`
             );
             img.classList.add(`${className}-out`);
             img.classList.remove(className);

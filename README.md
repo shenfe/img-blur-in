@@ -15,11 +15,11 @@ Make images loading lazily with a blur-in effect.
     -ms-filter: blur(32px);
     -o-filter: blur(32px);
     filter: blur(32px);
-    -webkit-transition: all ease .4s;
-    -moz-transition: all ease .4s;
-    -ms-transition: all ease .4s;
-    -o-transition: all ease .4s;
-    transition: all ease .4s;
+    -webkit-transition: all ease .2s;
+    -moz-transition: all ease .2s;
+    -ms-transition: all ease .2s;
+    -o-transition: all ease .2s;
+    transition: all ease .2s;
 }
 ```
 
