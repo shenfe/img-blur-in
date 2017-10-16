@@ -42,11 +42,6 @@ const process = (img: Image, className: string): void => {
         let onLoaded = function () {
             img.src = url;
             ifReplace && img.removeAttribute('data-src');
-            addCssRule(
-                `.${className}-out`, 
-                `-webkit-filter: none;-moz-filter: none;-ms-filter: none;-o-filter: none;filter: none;
-                -webkit-transition: all ease .2s;-moz-transition: all ease .2s;-ms-transition: all ease .2s;-o-transition: all ease .2s;transition: all ease .2s;`
-            );
             img.classList.add(`${className}-out`);
             img.classList.remove(className);
         };
@@ -78,6 +73,12 @@ const process = (img: Image, className: string): void => {
 };
 
 export const watch = (className: string): void => {
+    addCssRule(
+        `.${className}-out`,
+        `-webkit-filter: none;-moz-filter: none;-ms-filter: none;-o-filter: none;filter: none;
+        -webkit-transition: all ease .2s;-moz-transition: all ease .2s;-ms-transition: all ease .2s;-o-transition: all ease .2s;transition: all ease .2s;`
+    );
+
     domready(function () {
         let imgs: Array<Image> = [].slice.call(window.document.querySelectorAll(`img.${className}`), 0);
         imgs.forEach(img => {

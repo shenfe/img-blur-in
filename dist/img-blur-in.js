@@ -212,7 +212,6 @@ var process = function (img, className) {
         var onLoaded = function () {
             img.src = url;
             ifReplace && img.removeAttribute('data-src');
-            addCssRule("." + className + "-out", "-webkit-filter: none;-moz-filter: none;-ms-filter: none;-o-filter: none;filter: none;\n                -webkit-transition: all ease .2s;-moz-transition: all ease .2s;-ms-transition: all ease .2s;-o-transition: all ease .2s;transition: all ease .2s;");
             img.classList.add(className + "-out");
             img.classList.remove(className);
         };
@@ -245,6 +244,7 @@ var process = function (img, className) {
     }
 };
 var watch = function (className) {
+    addCssRule("." + className + "-out", "-webkit-filter: none;-moz-filter: none;-ms-filter: none;-o-filter: none;filter: none;\n        -webkit-transition: all ease .2s;-moz-transition: all ease .2s;-ms-transition: all ease .2s;-o-transition: all ease .2s;transition: all ease .2s;");
     domReady(function () {
         var imgs = [].slice.call(window.document.querySelectorAll("img." + className), 0);
         imgs.forEach(function (img) {
