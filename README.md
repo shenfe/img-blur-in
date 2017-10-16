@@ -1,6 +1,6 @@
 # img-blur-in
 
-Make images loading lazily with a blur effect.
+Make images loading lazily with a blur-in effect.
 
 <p align="center"><img src="https://raw.githubusercontent.com/shenfe/img-blur-in/master/readme_assets/demo.png" alt="demo"></p>
 
