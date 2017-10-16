@@ -1,11 +1,12 @@
 export const addCssRule = (selector: string, style: string): void => {
-    let styleTag = window.document.getElementsByTagName('style')[0];
-    if (!styleTag) {
-        styleTag = window.document.createElement('style');
-        styleTag.setAttribute('type', 'text/css');
-        window.document.getElementsByTagName('head')[0].appendChild(styleTag);
+    let styleEl: HTMLStyleElement = window.document.head.getElementsByTagName('style')[0];
+    if (!styleEl) {
+        styleEl = window.document.createElement('style');
+        window.document.head.insertBefore(styleEl, window.document.head.firstChild);
     }
-    styleTag.appendChild(window.document.createTextNode(`${selector}{${style}}`));
+    let styleSheet: CSSStyleSheet = <CSSStyleSheet>styleEl.sheet;
+    let cssRules = styleSheet.cssRules || styleSheet.rules;
+    styleSheet.insertRule(`${selector}{${style}}`, cssRules.length);
 }
 
 export const kvs2str = (obj: {

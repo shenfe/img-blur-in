@@ -40,38 +40,38 @@ var throttle = function (func, wait, options) {
     };
 };
 
-const fns = [];
+var fns = [];
 
-let ready = (window.document.documentElement.doScroll ? /^loaded|^c/ : /^loaded|^i|^c/).test(window.document.readyState);
+var ready = (window.document.documentElement.doScroll ? /^loaded|^c/ : /^loaded|^i|^c/).test(window.document.readyState);
 
-let listener;
+var _listener = void 0;
 
-!ready &&
-window.document.addEventListener &&
-window.document.addEventListener('DOMContentLoaded', listener = function () {
-    window.document.removeEventListener('DOMContentLoaded', listener);
+!ready && window.document.addEventListener && window.document.addEventListener('DOMContentLoaded', _listener = function listener() {
+    window.document.removeEventListener('DOMContentLoaded', _listener);
     ready = true;
-    while (listener = fns.shift()) listener();
+    while (_listener = fns.shift()) {
+        _listener();
+    }
 });
 
 function domReady(fn) {
     ready ? window.setTimeout(fn, 0) : fns.push(fn);
 }
 
-let isArray = Array.isArray;
-let selectorToAnimationMap = {};
-let animationCallbacks = {};
-let styleEl;
-let styleSheet;
-let cssRules;
+var isArray = Array.isArray;
+var selectorToAnimationMap = {};
+var animationCallbacks = {};
+var styleEl = void 0;
+var styleSheet = void 0;
+var cssRules = void 0;
 
-const sentinel = {
+var sentinel = {
     /**
      * Add watcher.
      * @param {array} cssSelectors - List of CSS selector strings
      * @param {Function} callback - The callback function
      */
-    on: function (cssSelectors, callback) {
+    on: function on(cssSelectors, callback) {
         if (!callback) return;
 
         // initialize animationstart event listener
@@ -91,7 +91,9 @@ const sentinel = {
 
                 // iterate through callbacks
                 l = callbacks.length;
-                for (i = 0; i < l; i++) callbacks[i](ev.target);
+                for (i = 0; i < l; i++) {
+                    callbacks[i](ev.target);
+                }
             }, true);
 
             // add stylesheet to document
@@ -102,87 +104,74 @@ const sentinel = {
         }
 
         // listify argument and add css rules/ cache callbacks
-        (isArray(cssSelectors) ? cssSelectors : [cssSelectors])
-            .map(function (selector, animId, isCustomName) {
-                animId = selectorToAnimationMap[selector];
+        (isArray(cssSelectors) ? cssSelectors : [cssSelectors]).map(function (selector, animId, isCustomName) {
+            animId = selectorToAnimationMap[selector];
 
-                if (!animId) {
-                    isCustomName = selector[0] == '!';
+            if (!animId) {
+                isCustomName = selector[0] == '!';
 
-                    // define animation name and add to map
-                    selectorToAnimationMap[selector] = animId =
-                        isCustomName ? selector.slice(1) : 'sentinel-' +
-                            Math.random().toString(16).slice(2);
+                // define animation name and add to map
+                selectorToAnimationMap[selector] = animId = isCustomName ? selector.slice(1) : 'sentinel-' + Math.random().toString(16).slice(2);
 
-                    // add keyframe rule
-                    cssRules[styleSheet.insertRule(
-                        '@keyframes ' + animId +
-                        '{from{transform:none;}to{transform:none;}}',
-                        cssRules.length)]
-                        ._id = selector;
+                // add keyframe rule
+                cssRules[styleSheet.insertRule('@keyframes ' + animId + '{from{transform:none;}to{transform:none;}}', cssRules.length)]._id = selector;
 
-                    // add selector animation rule
-                    if (!isCustomName) {
-                        cssRules[styleSheet.insertRule(
-                            selector + '{animation-duration:0.0001s;animation-name:' +
-                            animId + ';}',
-                            cssRules.length)]
-                            ._id = selector;
-                    }
-
-                    // add to map
-                    selectorToAnimationMap[selector] = animId;
+                // add selector animation rule
+                if (!isCustomName) {
+                    cssRules[styleSheet.insertRule(selector + '{animation-duration:0.0001s;animation-name:' + animId + ';}', cssRules.length)]._id = selector;
                 }
 
-                // add to callbacks
-                (animationCallbacks[animId] = animationCallbacks[animId] || [])
-                    .push(callback);
-            });
+                // add to map
+                selectorToAnimationMap[selector] = animId;
+            }
+
+            // add to callbacks
+            (animationCallbacks[animId] = animationCallbacks[animId] || []).push(callback);
+        });
     },
     /**
      * Remove watcher.
      * @param {array} cssSelectors - List of CSS selector strings
      * @param {Function} callback - The callback function (optional)
      */
-    off: function (cssSelectors, callback) {
+    off: function off(cssSelectors, callback) {
         // listify argument and iterate through rules
-        (isArray(cssSelectors) ? cssSelectors : [cssSelectors])
-            .map(function (selector, animId, callbackList, i) {
-                // get animId
-                if (!(animId = selectorToAnimationMap[selector])) return;
+        (isArray(cssSelectors) ? cssSelectors : [cssSelectors]).map(function (selector, animId, callbackList, i) {
+            // get animId
+            if (!(animId = selectorToAnimationMap[selector])) return;
 
-                // get callbacks
-                callbackList = animationCallbacks[animId];
+            // get callbacks
+            callbackList = animationCallbacks[animId];
 
-                // remove callback from list
-                if (callback) {
-                    i = callbackList.length;
-
-                    while (i--) {
-                        if (callbackList[i] === callback) callbackList.splice(i, 1);
-                    }
-                } else {
-                    callbackList = [];
-                }
-
-                // exit if callbacks still exist
-                if (callbackList.length) return;
-
-                // clear cache and remove css rules
-                i = cssRules.length;
+            // remove callback from list
+            if (callback) {
+                i = callbackList.length;
 
                 while (i--) {
-                    if (cssRules[i]._id == selector) styleSheet.deleteRule(i);
+                    if (callbackList[i] === callback) callbackList.splice(i, 1);
                 }
+            } else {
+                callbackList = [];
+            }
 
-                delete selectorToAnimationMap[selector];
-                delete animationCallbacks[animId];
-            });
+            // exit if callbacks still exist
+            if (callbackList.length) return;
+
+            // clear cache and remove css rules
+            i = cssRules.length;
+
+            while (i--) {
+                if (cssRules[i]._id == selector) styleSheet.deleteRule(i);
+            }
+
+            delete selectorToAnimationMap[selector];
+            delete animationCallbacks[animId];
+        });
     },
     /**
      * Reset watchers and cache
      */
-    reset: function () {
+    reset: function reset() {
         selectorToAnimationMap = {};
         animationCallbacks = {};
         if (styleEl) styleEl.parentNode.removeChild(styleEl);
