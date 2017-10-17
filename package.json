@@ -2,7 +2,8 @@
   "main": "dist/img-blur-in.js",
   "scripts": {
     "test": "node ./test/server.js",
-    "build": "rollup -c ./build/rollup.config.js"
+    "build": "rollup -c ./build/rollup.config.js",
+    "build:min": "rollup -c ./build/rollup-min.config.js"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -21,7 +22,7 @@
   },
   "name": "img-blur-in",
   "description": "Make images loading lazily with a blur-in effect.",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "directories": {
     "test": "test"
   },

@@ -1,12 +1,19 @@
 # img-blur-in
 
-Make images loading lazily with a blur-in effect.
+![gzip size](http://img.badgesize.io/https://raw.githubusercontent.com/shenfe/img-blur-in/master/dist/img-blur-in.min.js?compression=gzip)
+<a href="https://www.npmjs.com/package/img-blur-in"><img src="https://img.shields.io/npm/v/img-blur-in.svg"></a>
+![downloads](https://img.shields.io/npm/dm/img-blur-in.svg)
+![license](https://img.shields.io/npm/l/img-blur-in.svg)
+
+Make images load lazily, with a blur-in effect.
 
 <p align="center"><img src="https://raw.githubusercontent.com/shenfe/img-blur-in/master/readme_assets/demo.png" alt="demo"></p>
 
 ## Usage
 
-### style
+### Style
+
+Add the default style below to your CSS.
 
 ```css
 .img-blur-in {
@@ -23,18 +30,37 @@ Make images loading lazily with a blur-in effect.
 }
 ```
 
-### script
+**Notice** If you need no CSS effects, just remove the properties. Lazy loading of images can be accomplished as well via this library.
 
-```html
-<script src="//path/to/img-blur-in.js"></script>
-```
+### HTML
 
-### html
+Give image tags the CSS class name. Here are three different choices:
 
 ```html
 <img class="img-blur-in" src="small.jpg" alt="blur until the image is loaded">
 <img class="img-blur-in" src="small.jpg" data-src="large.jpg" alt="blur until the large image is loaded">
 <img class="img-blur-in" src="small.jpg" data-src="large.jpg" data-lazy="true" alt="blur until the image is into the viewport and the large image is loaded">
+```
+
+### JavaScript
+
+Inject or import `img-blur-in`.
+
+#### inject
+
+```html
+<script src="//path/to/img-blur-in.js"></script>
+```
+
+#### import
+
+```bash
+npm install --save img-blur-in
+```
+
+```js
+/* index.js */
+require('img-blur-in')
 ```
 
 ### customization
@@ -44,6 +70,10 @@ If you have your own CSS class name for images, use it like this:
 ```js
 window.ImgBlurIn.watch('your-class');
 ```
+
+## Thanks
+
+* [sentineljs](https://github.com/muicss/sentineljs) -- Detect new DOM nodes using CSS selectors.
 
 ## License
 
