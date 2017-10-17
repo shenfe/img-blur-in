@@ -63,7 +63,7 @@ npm install --save img-blur-in
 require('img-blur-in')
 ```
 
-### customization
+### Customization
 
 If you have your own CSS class name for images, use it like this:
 
