@@ -91,7 +91,7 @@ var sentinel = {
                 head = doc.head;
 
             // add animationstart event listener
-            doc.addEventListener('animationstart', function (ev, callbacks, l, i) {
+            var animationstartHandler = function animationstartHandler(ev, callbacks, l, i) {
                 callbacks = animationCallbacks[ev.animationName];
 
                 // exit if callbacks haven't been registered
@@ -105,7 +105,9 @@ var sentinel = {
                 for (i = 0; i < l; i++) {
                     callbacks[i](ev.target);
                 }
-            }, true);
+            };
+            doc.addEventListener('webkitAnimationStart', animationstartHandler, true);
+            doc.addEventListener('animationstart', animationstartHandler, true);
 
             // add stylesheet to document
             styleEl = doc.createElement('style');
@@ -125,11 +127,25 @@ var sentinel = {
                 selectorToAnimationMap[selector] = animId = isCustomName ? selector.slice(1) : 'sentinel-' + Math.random().toString(16).slice(2);
 
                 // add keyframe rule
-                cssRules[styleSheet.insertRule('@keyframes ' + animId + '{from{transform:none;}to{transform:none;}}', cssRules.length)]._id = selector;
+                var keyframesContent = '{from{-webkit-transform:none;-moz-transform:none;-ms-transform:none;-o-transform:none;transform:none;}' + 'to{-webkit-transform:none;-moz-transform:none;-ms-transform:none;-o-transform:none;transform:none;}}';
+                var cssRuleIndex = void 0;
+                try {
+                    cssRuleIndex = styleSheet.insertRule('@-webkit-keyframes ' + animId + keyframesContent, cssRules.length);
+                } catch (e) {}
+                try {
+                    cssRuleIndex = styleSheet.insertRule('@-moz-keyframes ' + animId + keyframesContent, cssRules.length);
+                } catch (e) {}
+                try {
+                    cssRuleIndex = styleSheet.insertRule('@-o-keyframes ' + animId + keyframesContent, cssRules.length);
+                } catch (e) {}
+                try {
+                    cssRuleIndex = styleSheet.insertRule('@keyframes ' + animId + keyframesContent, cssRules.length);
+                } catch (e) {}
+                cssRules[cssRuleIndex]._id = selector;
 
                 // add selector animation rule
                 if (!isCustomName) {
-                    cssRules[styleSheet.insertRule(selector + '{animation-duration:0.0001s;animation-name:' + animId + ';}', cssRules.length)]._id = selector;
+                    cssRules[styleSheet.insertRule(selector + ('{-webkit-animation-duration:0.0001s;-moz-animation-duration:0.0001s;-ms-animation-duration:0.0001s;-o-animation-duration:0.0001s;animation-duration:0.0001s;\n                                -webkit-animation-name:' + animId + ';-moz-animation-name:' + animId + ';-ms-animation-name:' + animId + ';-o-animation-name:' + animId + ';animation-name:' + animId + ';}'), cssRules.length)]._id = selector;
                 }
 
                 // add to map

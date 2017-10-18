@@ -16,11 +16,11 @@ const sentinel = {
 
         // initialize animationstart event listener
         if (!styleEl) {
-            var doc = document,
+            let doc = document,
                 head = doc.head;
 
             // add animationstart event listener
-            doc.addEventListener('animationstart', function (ev, callbacks, l, i) {
+            let animationstartHandler = function (ev, callbacks, l, i) {
                 callbacks = animationCallbacks[ev.animationName];
 
                 // exit if callbacks haven't been registered
@@ -32,7 +32,9 @@ const sentinel = {
                 // iterate through callbacks
                 l = callbacks.length;
                 for (i = 0; i < l; i++) callbacks[i](ev.target);
-            }, true);
+            };
+            doc.addEventListener('webkitAnimationStart', animationstartHandler, true);
+            doc.addEventListener('animationstart', animationstartHandler, true);
 
             // add stylesheet to document
             styleEl = doc.createElement('style');
@@ -55,17 +57,28 @@ const sentinel = {
                             Math.random().toString(16).slice(2);
 
                     // add keyframe rule
-                    cssRules[styleSheet.insertRule(
-                        '@keyframes ' + animId +
-                        '{from{transform:none;}to{transform:none;}}',
-                        cssRules.length)]
-                        ._id = selector;
+                    let keyframesContent = '{from{-webkit-transform:none;-moz-transform:none;-ms-transform:none;-o-transform:none;transform:none;}' +
+                        'to{-webkit-transform:none;-moz-transform:none;-ms-transform:none;-o-transform:none;transform:none;}}';
+                    let cssRuleIndex;
+                    try {
+                        cssRuleIndex = styleSheet.insertRule('@-webkit-keyframes ' + animId + keyframesContent, cssRules.length);
+                    } catch (e) {}
+                    try {
+                        cssRuleIndex = styleSheet.insertRule('@-moz-keyframes ' + animId + keyframesContent, cssRules.length);
+                    } catch (e) {}
+                    try {
+                        cssRuleIndex = styleSheet.insertRule('@-o-keyframes ' + animId + keyframesContent, cssRules.length);
+                    } catch (e) {}
+                    try {
+                        cssRuleIndex = styleSheet.insertRule('@keyframes ' + animId + keyframesContent, cssRules.length);
+                    } catch (e) {}
+                    cssRules[cssRuleIndex]._id = selector;
 
                     // add selector animation rule
                     if (!isCustomName) {
                         cssRules[styleSheet.insertRule(
-                            selector + '{animation-duration:0.0001s;animation-name:' +
-                            animId + ';}',
+                            selector + `{-webkit-animation-duration:0.0001s;-moz-animation-duration:0.0001s;-ms-animation-duration:0.0001s;-o-animation-duration:0.0001s;animation-duration:0.0001s;
+                                -webkit-animation-name:${animId};-moz-animation-name:${animId};-ms-animation-name:${animId};-o-animation-name:${animId};animation-name:${animId};}`,
                             cssRules.length)]
                             ._id = selector;
                     }
