@@ -71,6 +71,16 @@ If you have your own CSS class name for images, use it like this:
 window.ImgBlurIn.watch('your-class');
 ```
 
+## Browser Compatibility
+
+* IE10+
+* Opera 12+
+* Safari 5+
+* Chrome
+* Firefox
+* iOS 6+
+* Android 4.4+
+
 ## Thanks
 
 * [sentineljs](https://github.com/muicss/sentineljs) -- Detect new DOM nodes using CSS selectors.
