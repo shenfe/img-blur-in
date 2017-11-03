@@ -22,7 +22,7 @@
   },
   "name": "img-blur-in",
   "description": "Make images loading lazily with a blur-in effect.",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "directories": {
     "test": "test"
   },

@@ -52,19 +52,16 @@ var throttle = function (func, wait, options) {
 };
 
 var fns = [];
-
 var ready = (window.document.documentElement.doScroll ? /^loaded|^c/ : /^loaded|^i|^c/).test(window.document.readyState);
-
-var _listener = void 0;
-
-!ready && window.document.addEventListener && window.document.addEventListener('DOMContentLoaded', _listener = function listener() {
-    window.document.removeEventListener('DOMContentLoaded', _listener);
-    ready = true;
-    while (_listener = fns.shift()) {
-        _listener();
-    }
-});
-
+var listener;
+!ready &&
+    window.document.addEventListener &&
+    window.document.addEventListener('DOMContentLoaded', listener = function () {
+        window.document.removeEventListener('DOMContentLoaded', listener);
+        ready = true;
+        while (listener = fns.shift())
+            listener();
+    });
 function domReady(fn) {
     ready ? window.setTimeout(fn, 0) : fns.push(fn);
 }
@@ -222,7 +219,7 @@ var inView = function (el) {
     return !(top >= h || bottom <= 0);
 };
 var process = function (img, className) {
-    var handle = function () {
+    var handle = function (callback) {
         var ifReplace = !!img.getAttribute('data-src');
         var url = img.getAttribute(ifReplace ? 'data-src' : 'src');
         var onLoaded = function () {
@@ -230,6 +227,7 @@ var process = function (img, className) {
             ifReplace && img.removeAttribute('data-src');
             img.classList.add(className + "-out");
             img.classList.remove(className);
+            callback && callback();
         };
         var i = new Image();
         i.src = url;
@@ -248,11 +246,15 @@ var process = function (img, className) {
             handle();
         }
         else {
-            window.addEventListener('scroll', throttle(function (e) {
+            var scrollHandler_1 = throttle(function (e) {
                 if (!inView(img))
                     return;
-                handle();
-            }, 100), false);
+                handle(function () {
+                    window.removeEventListener('scroll', scrollHandler_1, false);
+                    scrollHandler_1 = null;
+                });
+            }, 100);
+            window.addEventListener('scroll', scrollHandler_1, false);
         }
     }
     else {

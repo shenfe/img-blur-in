@@ -36,7 +36,7 @@ const inView = (el: HTMLElement): boolean => {
 };
 
 const process = (img: Image, className: string): void => {
-    let handle = () => {
+    let handle = (callback?: Function) => {
         let ifReplace: boolean = !!img.getAttribute('data-src');
         let url: string = img.getAttribute(ifReplace ? 'data-src' : 'src');
         let onLoaded = function () {
@@ -44,6 +44,7 @@ const process = (img: Image, className: string): void => {
             ifReplace && img.removeAttribute('data-src');
             img.classList.add(`${className}-out`);
             img.classList.remove(className);
+            callback && callback();
         };
 
         let i = new Image();
@@ -62,10 +63,14 @@ const process = (img: Image, className: string): void => {
         if (inView(img)) {
             handle();
         } else {
-            window.addEventListener('scroll', throttle(function (e: Event) {
+            let scrollHandler = throttle(function (e: Event) {
                 if (!inView(img)) return;
-                handle();
-            }, 100), false);
+                handle(function () {
+                    window.removeEventListener('scroll', scrollHandler, false);
+                    scrollHandler = null;
+                });
+            }, 100);
+            window.addEventListener('scroll', scrollHandler, false);
         }
     } else {
         handle();
