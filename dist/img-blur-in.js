@@ -5,14 +5,20 @@
 }(this, (function (exports) { 'use strict';
 
 var addCssRule = function (selector, style) {
-    var styleEl = window.document.head.getElementsByTagName('style')[0];
+    var head = window.document.head || window.document.getElementsByTagName('head')[0];
+    var styleEl = head.getElementsByTagName('style')[0];
     if (!styleEl) {
         styleEl = window.document.createElement('style');
-        window.document.head.insertBefore(styleEl, window.document.head.firstChild);
+        head.insertBefore(styleEl, head.firstChild);
     }
-    var styleSheet = styleEl.sheet;
+    var styleSheet = styleEl.sheet || styleEl.styleSheet;
     var cssRules = styleSheet.cssRules || styleSheet.rules;
-    styleSheet.insertRule(selector + "{" + style + "}", cssRules.length);
+    if (styleSheet.insertRule) {
+        styleSheet.insertRule(selector + "{" + style + "}", cssRules.length);
+    }
+    else if (styleSheet.addRule) {
+        styleSheet.addRule(selector, style);
+    }
 };
 
 var throttle = function (func, wait, options) {
@@ -273,10 +279,34 @@ var watch = function (className) {
         process(img, className);
     });
 };
+var detectIE = function () {
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf('MSIE ');
+    var trident = ua.indexOf('Trident/');
+    var edge = ua.indexOf('Edge/');
+    if (msie > 0) {
+        if (ua.indexOf('MSIE 1') > 0) {
+            return 10;
+        }
+        else {
+            return 9;
+        }
+    }
+    else if (trident > 0) {
+        return 11;
+    }
+    else if (edge > 0) {
+        return 'edge';
+    }
+    else
+        return false;
+};
 var init = function () {
     if (window[flag])
         return;
     window[flag] = true;
+    if (detectIE() === 9)
+        return false;
     watch('img-blur-in');
 };
 init();

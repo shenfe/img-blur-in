@@ -96,9 +96,35 @@ export const watch = (className: string): void => {
     });
 };
 
+const detectIE = () => {
+    let ua = window.navigator.userAgent;
+    let msie = ua.indexOf('MSIE ');
+    let trident = ua.indexOf('Trident/');
+    let edge = ua.indexOf('Edge/');
+    if (msie > 0) {
+        if (ua.indexOf('MSIE 1') > 0) {
+            // IE 10
+            return 10;
+        } else {
+            // older
+            return 9;
+        }
+    } else if (trident > 0) {
+        // IE 11
+        return 11;
+    } else if (edge > 0) {
+        // Edge
+        return 'edge';
+    } else
+        // other browser
+        return false;
+};
+
 const init = (): void => {
     if (window[flag]) return;
     window[flag] = true;
+    
+    if (detectIE() === 9) return false;
 
     let blurRadius: number = 15;
     let transitionDuration: number = .2;
