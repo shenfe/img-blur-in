@@ -37,7 +37,7 @@ Add the default style below to your CSS.
 Give image tags the CSS class name. Here are three different choices:
 
 ```html
-<img class="img-blur-in" src="small.jpg" alt="blur until the image is loaded">
+<img class="img-blur-in" src="large.jpg" alt="blur until the image is loaded">
 <img class="img-blur-in" src="small.jpg" data-src="large.jpg" alt="blur until the large image is loaded">
 <img class="img-blur-in" src="small.jpg" data-src="large.jpg" data-lazy="true" alt="blur until the image is into the viewport and the large image is loaded">
 ```
