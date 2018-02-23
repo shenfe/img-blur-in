@@ -55,7 +55,7 @@ Inject or import `img-blur-in`.
 #### import
 
 ```bash
-npm install --save img-blur-in
+$ npm install --save img-blur-in
 ```
 
 ```js
